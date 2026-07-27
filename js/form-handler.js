@@ -1,0 +1,63 @@
+/**
+ * Form submission handler for the recruitment venture site.
+ * POSTs form data to the ERPNext proxy server on the VPS.
+ */
+
+const PROXY_URL = 'https://tech.greenlee.website:18790'; // Or the actual proxy URL
+
+function getApiPath(formId) {
+  switch (formId) {
+    case 'jobSeekerForm': return '/api/job-seeker';
+    case 'employerForm': return '/api/employer';
+    case 'contactForm': return '/api/contact';
+    default: return '/api/contact';
+  }
+}
+
+async function submitForm(form, formId) {
+  const formData = new FormData(form);
+  const data = Object.fromEntries(formData.entries());
+  
+  const submitBtn = form.querySelector('button[type="submit"]');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Submitting...';
+  
+  try {
+    const response = await fetch(PROXY_URL + getApiPath(formId), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    
+    const result = await response.json();
+    
+    if (result.status === 'ok') {
+      alert('Thank you! Your submission was received successfully. We will be in touch soon.');
+      form.reset();
+    } else {
+      alert('There was an error submitting your information. Please try again or contact us directly.');
+    }
+  } catch (err) {
+    // Fallback for when the proxy isn't available (staging/demo mode)
+    console.log('Proxy not available, saving locally:', data);
+    localStorage.setItem('form_' + Date.now(), JSON.stringify(data));
+    alert('Thank you! Your information has been received. (Demo mode - data saved locally)');
+    form.reset();
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit';
+  }
+}
+
+// Wire up forms when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+  ['jobSeekerForm', 'employerForm', 'contactForm'].forEach(id => {
+    const form = document.getElementById(id);
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        submitForm(this, this.id);
+      });
+    }
+  });
+});
