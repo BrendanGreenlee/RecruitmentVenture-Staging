@@ -15,18 +15,17 @@ function getApiPath(formId) {
 }
 
 async function submitForm(form, formId) {
-  const formData = new FormData(form);
-  const data = Object.fromEntries(formData.entries());
-  
   const submitBtn = form.querySelector('button[type="submit"]');
   submitBtn.disabled = true;
   submitBtn.textContent = 'Submitting...';
   
   try {
+    // Use FormData (handles file uploads) - NOT JSON
+    const formData = new FormData(form);
+    
     const response = await fetch(PROXY_URL + getApiPath(formId), {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      body: formData
     });
     
     const result = await response.json();

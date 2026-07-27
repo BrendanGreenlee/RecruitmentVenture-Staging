@@ -14,9 +14,6 @@
 <body>
 
   <!-- ===== Staging Banner ===== -->
-  <div class="staging-banner">
-    ⚠️ STAGING SITE — RecruitmentVenture-Staging
-  </div>
 
   <!-- ===== Header ===== -->
   <header class="site-header">
@@ -85,8 +82,9 @@
             </select>
           </div>
           <div class="form-group">
-            <label for="js-resume">Resume/Portfolio URL</label>
-            <input type="url" id="js-resume" name="resume" placeholder="https://example.com/resume.pdf">
+            <label for="js-resume">Upload Resume</label>
+            <input type="file" id="js-resume" name="resume" accept=".pdf,.doc,.docx,.txt,.jpg,.png" class="file-input">
+            <span class="file-hint">Accepted: PDF, Word, text, images (max 10MB)</span>
           </div>
         </div>
         <div class="form-group">
