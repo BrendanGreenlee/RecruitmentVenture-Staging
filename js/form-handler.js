@@ -3,7 +3,7 @@
  * POSTs form data to the ERPNext proxy server on the VPS.
  */
 
-const PROXY_URL = 'https://tech.greenlee.website:18790'; // Or the actual proxy URL
+const PROXY_URL = "https://tech.greenlee.website";
 
 function getApiPath(formId) {
   switch (formId) {
