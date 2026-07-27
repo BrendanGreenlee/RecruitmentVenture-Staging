@@ -37,11 +37,8 @@ async function submitForm(form, formId) {
       alert('There was an error submitting your information. Please try again or contact us directly.');
     }
   } catch (err) {
-    // Fallback for when the proxy isn't available (staging/demo mode)
-    console.log('Proxy not available, saving locally:', data);
-    localStorage.setItem('form_' + Date.now(), JSON.stringify(data));
-    alert('Thank you! Your information has been received. (Demo mode - data saved locally)');
-    form.reset();
+    console.error('Submission error:', err);
+    alert('Error submitting form. Please try again or contact us directly.');
   } finally {
     submitBtn.disabled = false;
     submitBtn.textContent = 'Submit';
